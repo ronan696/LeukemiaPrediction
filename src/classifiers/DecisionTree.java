@@ -17,7 +17,7 @@ public class DecisionTree implements Serializable{
 	private TreeNode root;
 	//private RandomForest forest;
 	
-	public DecisionTree(ArrayList<ArrayList<String>> data,RandomForest forest, int treenum) {
+	public DecisionTree(ArrayList<ArrayList<String>> data, int treenum) {
 		// TODO Auto-generated constructor stub
 		//this.forest=forest;
 		N=data.size();

@@ -13,6 +13,9 @@ public class Initialization {
     public static String trainDataPath;
     public static int numComponents;
     public static String rfClassificationFilePath;
+    static public Integer numTrees;
+    static public Integer numAttrs;
+    static public Integer numNeighbours;
     public Initialization()    {
         src = null;
         width = 0;

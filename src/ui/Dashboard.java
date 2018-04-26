@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ui;
 
 import preprocessing.*;
@@ -33,10 +28,16 @@ public class Dashboard extends javax.swing.JFrame {
     /**
      * Creates new form DashBoard
      */
+    RandomForest rf;
+    ArrayList<ArrayList<String>> trainingData;
+    List<String> testRecords;
+    Long outputTime;
     public Dashboard() {
         initComponents();
         Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
         imageContainer.setBorder(border);
+        PrepareDataset pd = new PrepareDataset();
+        trainingData = pd.getData(Initialization.trainDataPath);
    }
     
     /**
@@ -56,14 +57,19 @@ public class Dashboard extends javax.swing.JFrame {
         performRFClassification = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         numTrees = new javax.swing.JSpinner();
         numAttributes = new javax.swing.JSpinner();
         trainRFClassifier = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         rfImagePath = new javax.swing.JTextField();
-        rfOutputFile = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        numNeighbours = new javax.swing.JSpinner();
+        jSeparator3 = new javax.swing.JSeparator();
+        browseImageKnn = new javax.swing.JButton();
+        knnImagePath = new javax.swing.JTextField();
+        performKnnClassification = new javax.swing.JButton();
+        setNeightbours = new javax.swing.JButton();
         imageContainer = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -118,24 +124,15 @@ public class Dashboard extends javax.swing.JFrame {
 
         jLabel2.setText("Number of Attributes");
 
-        jLabel3.setText("Output File Path");
-
-        numTrees.setModel(new javax.swing.SpinnerNumberModel(1, 1, 501, 1));
+        numTrees.setModel(new javax.swing.SpinnerNumberModel(151, 1, 501, 2));
         numTrees.setVerifyInputWhenFocusTarget(false);
 
-        numAttributes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 7, 1));
+        numAttributes.setModel(new javax.swing.SpinnerNumberModel(4, 1, 7, 1));
 
         trainRFClassifier.setText("Train Classifier");
         trainRFClassifier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 trainRFClassifierActionPerformed(evt);
-            }
-        });
-
-        rfOutputFile.setText("Browse");
-        rfOutputFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rfOutputFileActionPerformed(evt);
             }
         });
 
@@ -149,16 +146,12 @@ public class Dashboard extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
+                            .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(numAttributes, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(numTrees, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextField1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(rfOutputFile))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(numTrees, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                            .addComponent(numAttributes))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(browseImageRF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -175,29 +168,92 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(numTrees, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(numAttributes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rfOutputFile))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(trainRFClassifier)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(9, 9, 9)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rfImagePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(browseImageRF))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(performRFClassification)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Random Forest", jPanel1);
+
+        jLabel3.setText("Number of Neighbours");
+
+        numNeighbours.setModel(new javax.swing.SpinnerNumberModel(3, 1, 15, 2));
+
+        browseImageKnn.setText("Browse Image");
+        browseImageKnn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                browseImageKnnActionPerformed(evt);
+            }
+        });
+
+        performKnnClassification.setText("Classify");
+        performKnnClassification.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                performKnnClassificationActionPerformed(evt);
+            }
+        });
+
+        setNeightbours.setText("Set");
+        setNeightbours.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setNeightboursActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(performKnnClassification, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(browseImageKnn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(knnImagePath))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(numNeighbours, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 198, Short.MAX_VALUE))
+                    .addComponent(setNeightbours, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(numNeighbours, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addComponent(setNeightbours)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(browseImageKnn)
+                    .addComponent(knnImagePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(performKnnClassification)
+                .addGap(31, 31, 31))
+        );
+
+        jTabbedPane1.addTab("kNN", jPanel2);
 
         imageContainer.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         imageContainer.setText("Image Not Loaded");
@@ -249,24 +305,20 @@ public class Dashboard extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 735, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(imageContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(imageContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(imageContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(imageContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -275,12 +327,24 @@ public class Dashboard extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void startTimer() {
+        outputTime = System.currentTimeMillis();
+    }
+    
+        private static String timeElapsed(long time) {
+        double s = (double) (System.currentTimeMillis() - time) / 1000;
+        int h = (int) Math.floor(s / ((double) 3600));
+        s -= (h * 3600);
+        int m = (int) Math.floor(s / ((double) 60));
+        s -= (m * 60);
+        return m + " minute(s) " + s + " second(s)";
+    }
+    
     private void performAnalysisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performAnalysisActionPerformed
- 
+            
     }//GEN-LAST:event_performAnalysisActionPerformed
 
     private void performRFClassificationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performRFClassificationActionPerformed
-            //List<String> records = new ArrayList<>();
             try {
                 Initialization.src = ImageIO.read(new File(rfImagePath.getText()));
                 DefaultTableModel dtm = (DefaultTableModel) cellTable.getModel();
@@ -296,6 +360,12 @@ public class Dashboard extends javax.swing.JFrame {
             SwingWorker cellExtractor = new SwingWorker<Integer,Integer> ()    {
                 @Override
                 protected Integer doInBackground() throws Exception {
+                    testRecords = new ArrayList<>();
+                    Initialization.numAttrs = (Integer) numAttributes.getValue();
+                    Initialization.numTrees = (Integer) numTrees.getValue();
+                    rf = new RandomForest(Initialization.numTrees,4,7,Initialization.numAttrs,2,trainingData);
+                    rf.readFromFile();
+                    startTimer();
                     ceProgressMonitor.setNote("Performing Grayscale Conversion");
                     new Grayscale().convert();
                     publish(12);
@@ -327,7 +397,10 @@ public class Dashboard extends javax.swing.JFrame {
                             + fe.getPerimeter() + "," + fe.getFormFactor() + "," + fe.getStd() + "," 
                             + fe.getVar() + "," + fe.getEnergy() + "," + fe.getEntropy() + ","
                             + "test";
-                        //records.add(record);
+                                        
+                //String s = "1833.48,439.48737341529164,0.11928703298994943,8.907680240547194,79.34676726783492,0.03126279141729138,5.172957073376205";
+                        
+                        testRecords.add(rf.classify(new ArrayList<>(Arrays.asList(record.split(",")))));
                     }
                     return 100; 
                 }
@@ -355,7 +428,7 @@ public class Dashboard extends javax.swing.JFrame {
             try {
                 data[i-1][0] = new ImageIcon(ImageIO.read(new File("Components\\Component" + i + ".png")));
                 data[i-1][1] = new ImageIcon(ImageIO.read(new File("Components\\GComponent" + i + ".png")));
-                data[i-1][2] = "Cell " + i;   
+                data[i-1][2] = testRecords.get(i-1).equals("true")?"Affected":"Not Affected";   
             } catch (IOException ex) {
                 ex.printStackTrace();
             } 
@@ -386,6 +459,12 @@ public class Dashboard extends javax.swing.JFrame {
         for(int i=1;i<=Initialization.numComponents;i++)  {
             cellTable.setRowHeight(i-1,((Icon) data[i-1][0]).getIconHeight() + 10);
         }
+        Collections.sort(testRecords);
+        int numNotAffected = testRecords.indexOf("true");
+        int numAffected = testRecords.size() - numNotAffected;
+        JOptionPane.showMessageDialog(this,"Completed in " + timeElapsed(outputTime) + "\n" + Initialization.numComponents
+                + " componented detected.\nAffected Cells : " + numAffected + "\nUnaffected Cells : " + numNotAffected ,
+            "Completed", JOptionPane.PLAIN_MESSAGE);
     }
     
     private void settingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsActionPerformed
@@ -439,48 +518,141 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_exitSystemActionPerformed
 
     private void trainRFClassifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trainRFClassifierActionPerformed
-        JPanel rfProgressPanel = new JPanel();
-        JDialog mydialog = new JDialog();
-        
+        JDialog rfProgressPanel = new JDialog();
         JProgressBar rfProgress = new JProgressBar();
         rfProgress.setIndeterminate(true);
-        mydialog.add(rfProgress);
-                mydialog.setSize(new Dimension(400,100));
-                mydialog.setTitle("I got you! You can't click on your JFrame now!");
-                mydialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL); // prevent user from doing something else
-                
-//        rfProgressPanel.add(new JLabel("Generating Trees"));
-//        rfProgressPanel.add(rfProgress);
+        rfProgressPanel.setLocationRelativeTo(this);
+        rfProgressPanel.setLocation(300,300);
+        rfProgressPanel.add(rfProgress);
+        rfProgressPanel.setSize(new Dimension(300,50));
+        rfProgressPanel.setTitle("Generating Trees");
+        rfProgressPanel.setModalityType(Dialog.ModalityType.APPLICATION_MODAL); 
+        Initialization.numAttrs = (Integer) numAttributes.getValue();
+        Initialization.numTrees = (Integer) numTrees.getValue();
+        
         SwingWorker randomForestGenerator = new SwingWorker<Integer,String>   ()   {
             @Override
             protected Integer doInBackground() {
-                publish("started");
-                PrepareDataset pd = new PrepareDataset();
-                Integer n = (Integer) numAttributes.getValue();
-                ArrayList<ArrayList<String>> trainingData = pd.getData(Initialization.trainDataPath);
-                if(n == 0)
-                    n = (int) Math.round(Math.log(7)/Math.log(2)+1);
-                RandomForest rf = new RandomForest((Integer) numTrees.getValue(),4,7,n,2,trainingData);
+                publish("Started");
+                rf = new RandomForest(Initialization.numTrees,4,7,Initialization.numAttrs,2,trainingData);
                 rf.writeToFile(); 
+//                rf.readFromFile();
+//                String s = "1833.48,439.48737341529164,0.11928703298994943,8.907680240547194,79.34676726783492,0.03126279141729138,5.172957073376205";
+//                rf.classify(new ArrayList<>(Arrays.asList(s.split(","))));
                 return 100;
             }
             
             @Override
             protected void process(List<String> chunks) {
-                mydialog.setVisible(true);
+                rfProgressPanel.setVisible(true);
             }
             @Override
             protected void done()   {
-                //System.out.println("Done");
-                mydialog.setVisible(false);
+                rfProgressPanel.setVisible(false);
             }
         }; 
         randomForestGenerator.execute();
     }//GEN-LAST:event_trainRFClassifierActionPerformed
 
-    private void rfOutputFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rfOutputFileActionPerformed
+    private void browseImageKnnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseImageKnnActionPerformed
+        JFileChooser fc=new JFileChooser("D:\\Dataset\\ALL_IDB1\\images");
+        fc.setDialogTitle("Select an Image");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "png", "gif","jpg","jpeg");
+        fc.setFileFilter(filter);
+        fc.removeChoosableFileFilter(fc.getAcceptAllFileFilter());
+        ImagePreviewPanel preview = new ImagePreviewPanel();
+        fc.setAccessory(preview);
+        fc.addPropertyChangeListener(preview);
+        int i = fc.showOpenDialog(this);
+        if(i==JFileChooser.APPROVE_OPTION){
+            File f=fc.getSelectedFile();
+            String filePath=f.getPath();
+            try{
+                knnImagePath.setText(filePath);
+                Initialization.src = ImageIO.read(new File(filePath));
+                ImageIcon im = new ImageIcon(Initialization.src.getScaledInstance(imageContainer.getWidth(), imageContainer.getHeight(),Image.SCALE_SMOOTH));
+                imageContainer.setIcon(im);
+            }
+            catch(Exception e)  {
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_browseImageKnnActionPerformed
 
-    }//GEN-LAST:event_rfOutputFileActionPerformed
+    private void setNeightboursActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setNeightboursActionPerformed
+        Initialization.numNeighbours = (Integer) numNeighbours.getValue();
+    }//GEN-LAST:event_setNeightboursActionPerformed
+
+    private void performKnnClassificationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performKnnClassificationActionPerformed
+        try {
+                Initialization.src = ImageIO.read(new File(knnImagePath.getText()));
+                DefaultTableModel dtm = (DefaultTableModel) cellTable.getModel();
+                dtm.getDataVector().removeAllElements();
+                dtm.fireTableDataChanged();
+//                while(dtm.getRowCount() > 0)
+//                    dtm.removeRow(0);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            ProgressMonitor ceProgressMonitor = new ProgressMonitor(this,"Preprocessing Image","",0,100);
+            ceProgressMonitor.setMillisToPopup(500);
+            SwingWorker cellExtractor = new SwingWorker<Integer,Integer> ()    {
+                @Override
+                protected Integer doInBackground() throws Exception {
+                    testRecords = new ArrayList<>();
+                    startTimer();
+                    ceProgressMonitor.setNote("Performing Grayscale Conversion");
+                    new Grayscale().convert();
+                    publish(12);
+                    ceProgressMonitor.setNote("Performing Histogram Equalization");
+                    new HistogramEqualization().performHistEqualization();
+                    publish(25);
+                    ceProgressMonitor.setNote("Performing Contrast Stretching");
+                    new ContrastStretching().performcs();
+                    publish(37);
+                    ceProgressMonitor.setNote("Performing Image Arithmetic");
+                    new ImageArithmetic().compute();
+                    publish(50);
+                    ceProgressMonitor.setNote("Performing Median Filtering");
+                    new MedianFilter().performmf();
+                    publish(63);
+                    ceProgressMonitor.setNote("Converting to Binary Image");
+                    new KMeans().init();
+                    publish(75);
+                    ceProgressMonitor.setNote("Performing Opening");
+                    new Opening().open();
+                    publish(80);
+                    ceProgressMonitor.setNote("Extracting Components");
+                    Initialization.numComponents = new SAGAP().perform();
+                    for(int i=1;i<=Initialization.numComponents;i++)   {
+                        FeatureExtraction fe = new FeatureExtraction();
+                        fe.computeFeatures("Components\\Component"+i+".png","Components\\GComponent"+i+".png");
+                        fe.computePerimeter("Components\\Component"+i+".png");
+                        String record = fe.getArea() + ","
+                            + fe.getPerimeter() + "," + fe.getFormFactor() + "," + fe.getStd() + "," 
+                            + fe.getVar() + "," + fe.getEnergy() + "," + fe.getEntropy() + ","
+                            + "test";
+                        KNN.kValue = (Integer) numNeighbours.getValue();
+                        //testRecords.add();
+                    }
+                    return 100; 
+                }
+                
+                @Override
+                protected void process(List<Integer> chunks)    {
+                    int val = chunks.get(chunks.size()-1);
+                    ceProgressMonitor.setProgress(val);
+                }
+
+                @Override
+                protected void done()   {
+                    ceProgressMonitor.close();
+                    populateTable();
+                }
+                
+            };
+            cellExtractor.execute();
+    }//GEN-LAST:event_performKnnClassificationActionPerformed
 
     /**
      * @param args the command line arguments
@@ -534,6 +706,7 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton browseImageKnn;
     private javax.swing.JButton browseImageRF;
     private static javax.swing.JTable cellTable;
     private javax.swing.JMenuItem exitSystem;
@@ -544,18 +717,22 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField knnImagePath;
     private javax.swing.JMenuItem newFeatureFile;
     private javax.swing.JSpinner numAttributes;
+    private javax.swing.JSpinner numNeighbours;
     private javax.swing.JSpinner numTrees;
     private javax.swing.JMenuItem performAnalysis;
+    private javax.swing.JButton performKnnClassification;
     private javax.swing.JButton performRFClassification;
     private javax.swing.JTextField rfImagePath;
-    private javax.swing.JButton rfOutputFile;
+    private javax.swing.JButton setNeightbours;
     private javax.swing.JMenuItem settings;
     private javax.swing.JButton trainRFClassifier;
     // End of variables declaration//GEN-END:variables
