@@ -16,13 +16,235 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="400" max="32767" attributes="0"/>
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="numTrSamples" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="numTestSamples" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="242" pref="226" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="startAnalysis" alignment="0" max="32767" attributes="0"/>
+                          <Component id="analysisProgress" alignment="1" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="rfSensitivity" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="rfSpecificity" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="rfAccuracy" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="rfTime" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="rfTp" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="rfTn" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="rfFp" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="rfFn" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel1" alignment="0" min="-2" pref="96" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="106" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="knnTime" min="-2" max="-2" attributes="0"/>
+                                  <Component id="knnTp" min="-2" max="-2" attributes="0"/>
+                                  <Component id="knnTn" min="-2" max="-2" attributes="0"/>
+                                  <Component id="knnFp" min="-2" max="-2" attributes="0"/>
+                                  <Component id="knnFn" min="-2" max="-2" attributes="0"/>
+                                  <Component id="knnSensitivity" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="knnSpecificity" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="knnAccuracy" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="300" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="numTrSamples" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="numTestSamples" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="rfAccuracy" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="rfTime" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="rfTp" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="rfTn" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="rfFp" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="rfFn" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="rfSensitivity" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="rfSpecificity" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="knnAccuracy" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="knnTime" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="knnTp" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="knnTn" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="knnFp" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="knnFn" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
+                              <Component id="knnSpecificity" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="knnSensitivity" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="analysisProgress" min="-2" pref="24" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="startAnalysis" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
   </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="12" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Random Forest"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel2">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="12" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="kNN"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="numTrSamples">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Number of Training Samples : N/A "/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="numTestSamples">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Number of Test Samples : N/A"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="rfAccuracy">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Accuracy : N/A"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="knnAccuracy">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Accuracy : N/A"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="rfTime">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Time Taken : N/A"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="knnTime">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Time Taken : N/A"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="rfTp">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="True Positive : N/A"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="knnTp">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="True Positive : N/A"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="rfTn">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="True Negative : N/A"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="knnTn">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="True Negative : N/A"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="rfFp">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="False Positive : N/A"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="knnFp">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="False Positive : N/A"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="rfFn">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="False Negative : N/A"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="knnFn">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="False Negative : N/A"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JProgressBar" name="analysisProgress">
+    </Component>
+    <Component class="javax.swing.JLabel" name="rfSensitivity">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Sensitivity : N/A"/>
+        <Property name="toolTipText" type="java.lang.String" value="Probability of correctly classifiying cells with ALL"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="knnSensitivity">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Sensitivity : N/A"/>
+        <Property name="toolTipText" type="java.lang.String" value="Probability of correctly classifiying cells with ALL"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="rfSpecificity">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Specificity : N/A"/>
+        <Property name="toolTipText" type="java.lang.String" value="Probability of correctly classifiying cells without ALL"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="knnSpecificity">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Specificity : N/A"/>
+        <Property name="toolTipText" type="java.lang.String" value="Probability of correctly classifiying cells without ALL"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="startAnalysis">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Start Analysis"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="startAnalysisActionPerformed"/>
+      </Events>
+    </Component>
+  </SubComponents>
 </Form>

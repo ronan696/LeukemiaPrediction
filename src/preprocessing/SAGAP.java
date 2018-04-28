@@ -120,6 +120,7 @@ public class SAGAP {
 //            System.out.println();
 //        }
         int c = 1;
+
         for(Point t : sTree.keySet())   {
             int [] cd = coordinates.get(t);
             BufferedImage bin = new BufferedImage(cd[3]-cd[1]+3,cd[2]-cd[0]+3,BufferedImage.TYPE_BYTE_BINARY);

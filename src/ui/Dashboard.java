@@ -331,7 +331,7 @@ public class Dashboard extends javax.swing.JFrame {
         outputTime = System.currentTimeMillis();
     }
     
-        private static String timeElapsed(long time) {
+    private static String timeElapsed(long time) {
         double s = (double) (System.currentTimeMillis() - time) / 1000;
         int h = (int) Math.floor(s / ((double) 3600));
         s -= (h * 3600);
@@ -341,6 +341,9 @@ public class Dashboard extends javax.swing.JFrame {
     }
     
     private void performAnalysisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performAnalysisActionPerformed
+            AnalysisPanel ap = new AnalysisPanel();
+            JOptionPane.showOptionDialog(null, ap,
+            "Analysis", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,null,new Object[]{},null);
             
     }//GEN-LAST:event_performAnalysisActionPerformed
 
@@ -459,9 +462,13 @@ public class Dashboard extends javax.swing.JFrame {
         for(int i=1;i<=Initialization.numComponents;i++)  {
             cellTable.setRowHeight(i-1,((Icon) data[i-1][0]).getIconHeight() + 10);
         }
-        Collections.sort(testRecords);
-        int numNotAffected = testRecords.indexOf("true");
-        int numAffected = testRecords.size() - numNotAffected;
+        int numNotAffected = 0;
+        int numAffected = 0;
+        for(String c : testRecords) {
+            if(c.equals("true"))    numAffected++;
+            else    numNotAffected++;
+        }
+
         JOptionPane.showMessageDialog(this,"Completed in " + timeElapsed(outputTime) + "\n" + Initialization.numComponents
                 + " componented detected.\nAffected Cells : " + numAffected + "\nUnaffected Cells : " + numNotAffected ,
             "Completed", JOptionPane.PLAIN_MESSAGE);
@@ -630,9 +637,10 @@ public class Dashboard extends javax.swing.JFrame {
                         fe.computePerimeter("Components\\Component"+i+".png");
                         String record = fe.getArea() + ","
                             + fe.getPerimeter() + "," + fe.getFormFactor() + "," + fe.getStd() + "," 
-                            + fe.getVar() + "," + fe.getEnergy() + "," + fe.getEntropy() + ","
-                            + "test";
-                        KNN.kValue = (Integer) numNeighbours.getValue();
+                            + fe.getVar() + "," + fe.getEnergy() + "," + fe.getEntropy();
+                        Initialization.numNeighbours = (Integer) numNeighbours.getValue();;
+                        KNN.kValue = Initialization.numNeighbours;
+                        testRecords.add(new KNN().perform(record));
                         //testRecords.add();
                     }
                     return 100; 
@@ -725,9 +733,9 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField knnImagePath;
     private javax.swing.JMenuItem newFeatureFile;
-    private javax.swing.JSpinner numAttributes;
-    private javax.swing.JSpinner numNeighbours;
-    private javax.swing.JSpinner numTrees;
+    public static javax.swing.JSpinner numAttributes;
+    public static javax.swing.JSpinner numNeighbours;
+    public static javax.swing.JSpinner numTrees;
     private javax.swing.JMenuItem performAnalysis;
     private javax.swing.JButton performKnnClassification;
     private javax.swing.JButton performRFClassification;
