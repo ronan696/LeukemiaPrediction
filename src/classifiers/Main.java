@@ -15,7 +15,7 @@ public class Main {
 		PrepareDataset pd = new PrepareDataset();
 		ArrayList<ArrayList<String>> trainingData = pd.getData("celldata.txt");
 		//List<List<String>> testingData = pd.getData("LeuTest.txt");
-		RandomForest rf = new RandomForest(numTrees,4,numAttrs,numAttrsSub,2,trainingData);
+		RandomForest rf = new RandomForest(numTrees,numAttrs,numAttrsSub,2,trainingData);
 		rf.Start(new ArrayList<String>(Arrays.asList(record.split(","))));
 //		for(List<String> s : trainingData) {
 //			for(String p : s)	{

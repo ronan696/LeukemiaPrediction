@@ -137,14 +137,16 @@ public class SAGAP {
                 bin.setRGB(y,x,Color.WHITE.getRGB());
                 gr.setRGB(y,x,g.getRGB());
             }
-            try {
-                ImageIO.write(bin, "png", new File("Components\\Component" + c + ".png"));
-                ImageIO.write(gr, "png", new File("Components\\GComponent" + c + ".png"));
+            if(bin.getWidth()>60 && bin.getHeight()>60) {
+                try {
+                    ImageIO.write(bin, "png", new File("Components\\Component" + c + ".png"));
+                    ImageIO.write(gr, "png", new File("Components\\GComponent" + c + ".png"));
+                }
+                catch(IOException e)    {
+                    e.printStackTrace();
+                }
+                c++;
             }
-            catch(IOException e)    {
-                e.printStackTrace();
-            }
-            c++;
         }
 
         System.out.println("Completed Writing in " + TimeElapsed(time_o));

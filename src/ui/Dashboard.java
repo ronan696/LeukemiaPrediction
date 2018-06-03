@@ -75,11 +75,14 @@ public class Dashboard extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         newFeatureFile = new javax.swing.JMenuItem();
         performAnalysis = new javax.swing.JMenuItem();
-        settings = new javax.swing.JMenuItem();
+        preferences = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         exitSystem = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        about = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Leukemia Prediction");
 
         cellTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -269,6 +272,7 @@ public class Dashboard extends javax.swing.JFrame {
         });
         jMenu1.add(newFeatureFile);
 
+        performAnalysis.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         performAnalysis.setText("Analysis");
         performAnalysis.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -277,13 +281,14 @@ public class Dashboard extends javax.swing.JFrame {
         });
         jMenu1.add(performAnalysis);
 
-        settings.setText("Settings");
-        settings.addActionListener(new java.awt.event.ActionListener() {
+        preferences.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        preferences.setText("Preferences");
+        preferences.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                settingsActionPerformed(evt);
+                preferencesActionPerformed(evt);
             }
         });
-        jMenu1.add(settings);
+        jMenu1.add(preferences);
         jMenu1.add(jSeparator1);
 
         exitSystem.setText("Exit");
@@ -295,6 +300,18 @@ public class Dashboard extends javax.swing.JFrame {
         jMenu1.add(exitSystem);
 
         jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Help");
+
+        about.setText("About");
+        about.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aboutActionPerformed(evt);
+            }
+        });
+        jMenu2.add(about);
+
+        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -366,7 +383,7 @@ public class Dashboard extends javax.swing.JFrame {
                     testRecords = new ArrayList<>();
                     Initialization.numAttrs = (Integer) numAttributes.getValue();
                     Initialization.numTrees = (Integer) numTrees.getValue();
-                    rf = new RandomForest(Initialization.numTrees,4,7,Initialization.numAttrs,2,trainingData);
+                    rf = new RandomForest(Initialization.numTrees,7,Initialization.numAttrs,2,trainingData);
                     rf.readFromFile();
                     startTimer();
                     ceProgressMonitor.setNote("Performing Grayscale Conversion");
@@ -431,7 +448,7 @@ public class Dashboard extends javax.swing.JFrame {
             try {
                 data[i-1][0] = new ImageIcon(ImageIO.read(new File("Components\\Component" + i + ".png")));
                 data[i-1][1] = new ImageIcon(ImageIO.read(new File("Components\\GComponent" + i + ".png")));
-                data[i-1][2] = testRecords.get(i-1).equals("true")?"Affected":"Not Affected";   
+                data[i-1][2] = testRecords.get(i-1).equals("true")?"Blast Cell":"Normal Cell";   
             } catch (IOException ex) {
                 ex.printStackTrace();
             } 
@@ -462,32 +479,32 @@ public class Dashboard extends javax.swing.JFrame {
         for(int i=1;i<=Initialization.numComponents;i++)  {
             cellTable.setRowHeight(i-1,((Icon) data[i-1][0]).getIconHeight() + 10);
         }
-        int numNotAffected = 0;
-        int numAffected = 0;
+        int numNormalCell = 0;
+        int numBlastCell = 0;
         for(String c : testRecords) {
-            if(c.equals("true"))    numAffected++;
-            else    numNotAffected++;
+            if(c.equals("true"))    numBlastCell++;
+            else    numNormalCell++;
         }
 
         JOptionPane.showMessageDialog(this,"Completed in " + timeElapsed(outputTime) + "\n" + Initialization.numComponents
-                + " componented detected.\nAffected Cells : " + numAffected + "\nUnaffected Cells : " + numNotAffected ,
+                + " cells detected.\nBlast Cells : " + numBlastCell + "\nNormal Cells : " + numNormalCell ,
             "Completed", JOptionPane.PLAIN_MESSAGE);
     }
     
-    private void settingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsActionPerformed
-        SettingsPanel sp = new SettingsPanel();
-        SettingsPanel.testPath.setText(Initialization.testDataPath);
-        SettingsPanel.trainPath.setText(Initialization.trainDataPath);
-        SettingsPanel.rfClassificationFilePath.setText(Initialization.rfClassificationFilePath);
+    private void preferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preferencesActionPerformed
+        PreferencesPanel sp = new PreferencesPanel();
+        PreferencesPanel.testPath.setText(Initialization.testDataPath);
+        PreferencesPanel.trainPath.setText(Initialization.trainDataPath);
+        PreferencesPanel.rfClassificationFilePath.setText(Initialization.rfClassificationFilePath);
         int result = JOptionPane.showConfirmDialog(null, sp,
             "Settings", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-            Initialization.testDataPath = SettingsPanel.testPath.getText();
-            Initialization.trainDataPath = SettingsPanel.trainPath.getText();
-            Initialization.rfClassificationFilePath = SettingsPanel.rfClassificationFilePath.getText();
+            Initialization.testDataPath = PreferencesPanel.testPath.getText();
+            Initialization.trainDataPath = PreferencesPanel.trainPath.getText();
+            Initialization.rfClassificationFilePath = PreferencesPanel.rfClassificationFilePath.getText();
             Initialization.update();
         }
-    }//GEN-LAST:event_settingsActionPerformed
+    }//GEN-LAST:event_preferencesActionPerformed
 
     private void browseImageRFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseImageRFActionPerformed
         JFileChooser fc=new JFileChooser("D:\\Dataset\\ALL_IDB1\\images");
@@ -541,7 +558,7 @@ public class Dashboard extends javax.swing.JFrame {
             @Override
             protected Integer doInBackground() {
                 publish("Started");
-                rf = new RandomForest(Initialization.numTrees,4,7,Initialization.numAttrs,2,trainingData);
+                rf = new RandomForest(Initialization.numTrees,7,Initialization.numAttrs,2,trainingData);
                 rf.writeToFile(); 
 //                rf.readFromFile();
 //                String s = "1833.48,439.48737341529164,0.11928703298994943,8.907680240547194,79.34676726783492,0.03126279141729138,5.172957073376205";
@@ -638,7 +655,7 @@ public class Dashboard extends javax.swing.JFrame {
                         String record = fe.getArea() + ","
                             + fe.getPerimeter() + "," + fe.getFormFactor() + "," + fe.getStd() + "," 
                             + fe.getVar() + "," + fe.getEnergy() + "," + fe.getEntropy();
-                        Initialization.numNeighbours = (Integer) numNeighbours.getValue();;
+                        Initialization.numNeighbours = (Integer) numNeighbours.getValue();
                         KNN.kValue = Initialization.numNeighbours;
                         testRecords.add(new KNN().perform(record));
                         //testRecords.add();
@@ -661,6 +678,12 @@ public class Dashboard extends javax.swing.JFrame {
             };
             cellExtractor.execute();
     }//GEN-LAST:event_performKnnClassificationActionPerformed
+
+    private void aboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutActionPerformed
+        AboutPanel ap = new AboutPanel();
+        JOptionPane.showOptionDialog(this, ap, "About", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, new Object[]{} ,null);
+    }//GEN-LAST:event_aboutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -714,6 +737,7 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem about;
     private javax.swing.JButton browseImageKnn;
     private javax.swing.JButton browseImageRF;
     private static javax.swing.JTable cellTable;
@@ -723,6 +747,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -739,9 +764,9 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JMenuItem performAnalysis;
     private javax.swing.JButton performKnnClassification;
     private javax.swing.JButton performRFClassification;
+    private javax.swing.JMenuItem preferences;
     private javax.swing.JTextField rfImagePath;
     private javax.swing.JButton setNeightbours;
-    private javax.swing.JMenuItem settings;
     private javax.swing.JButton trainRFClassifier;
     // End of variables declaration//GEN-END:variables
 }

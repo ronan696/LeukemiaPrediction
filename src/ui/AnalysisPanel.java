@@ -219,12 +219,12 @@ public class AnalysisPanel extends javax.swing.JPanel {
     
     private void startAnalysisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startAnalysisActionPerformed
         analysisProgress.setMinimum(0);
-        analysisProgress.setMaximum(40);
         rfOutput = new ArrayList<>();
         knnOutput = new ArrayList<>();
         PrepareDataset pd = new PrepareDataset();
         trainingData = pd.getData(Initialization.trainDataPath);
         testData = pd.getData(Initialization.testDataPath);
+        analysisProgress.setMaximum(testData.size()*2);
         SwingWorker analysisWorker = new SwingWorker<Integer,Integer>() {
             @Override
             protected Integer doInBackground() {
@@ -235,7 +235,7 @@ public class AnalysisPanel extends javax.swing.JPanel {
                 //System.out.println(Initialization.numTrees + " " + Initialization.numAttrs);
                 Initialization.numAttrs = (Integer) Dashboard.numAttributes.getValue();
                 Initialization.numTrees = (Integer) Dashboard.numTrees.getValue();
-                RandomForest rf = new RandomForest(Initialization.numTrees,4,7,Initialization.numAttrs,2,trainingData);
+                RandomForest rf = new RandomForest(Initialization.numTrees,7,Initialization.numAttrs,2,trainingData);
                 rf.readFromFile();
                 for(int i=0;i<testData.size();i++)    {
                     publish(i+1);
@@ -266,7 +266,7 @@ public class AnalysisPanel extends javax.swing.JPanel {
                 System.out.println(Initialization.numNeighbours);
                 KNN.kValue = Initialization.numNeighbours;
                 for(int i=0;i<testData.size();i++)    {
-                    publish(i+21);
+                    publish(i+testData.size()+1);
                     String record = "";
                     for(int j=0;j<testData.get(i).size()-1;j++)
                         record += testData.get(i).get(j) + ",";

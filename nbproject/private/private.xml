@@ -5,10 +5,10 @@
         <group>
             <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/ui/Dashboard.java</file>
             <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/ui/ExtractFeaturesPanel.java</file>
-            <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/ui/SettingsPanel.java</file>
-            <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/classifiers/PrepareDataset.java</file>
-            <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/classifiers/RandomForest.java</file>
-            <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/classifiers/Main.java</file>
+            <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/ui/AnalysisPanel.java</file>
+            <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/preprocessing/SAGAP.java</file>
+            <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/ui/Initialization.java</file>
+            <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/preprocessing/ContrastStretching.java</file>
             <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/classifiers/DecisionTree.java</file>
         </group>
     </open-files>
