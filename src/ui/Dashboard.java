@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -33,6 +34,7 @@ public class Dashboard extends javax.swing.JFrame {
      */
     RandomForest rf;
     String filePath;
+    ProgressMonitor ceProgressMonitor;
     ArrayList<ArrayList<String>> trainingData;
     List<String> testRecords;
     Long outputTime;
@@ -379,7 +381,7 @@ public class Dashboard extends javax.swing.JFrame {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-            ProgressMonitor ceProgressMonitor = new ProgressMonitor(this,"Preprocessing Image","",0,100);
+            ceProgressMonitor = new ProgressMonitor(this,"Preprocessing Image","",0,100);
             ceProgressMonitor.setMillisToPopup(500);
             SwingWorker cellExtractor = new SwingWorker<Integer,Integer> ()    {
                 @Override
@@ -437,8 +439,8 @@ public class Dashboard extends javax.swing.JFrame {
 
                 @Override
                 protected void done()   {
-                    ceProgressMonitor.close();
                     populateTable();
+//                    ceProgressMonitor.close();
                 }
                 
             };
@@ -485,8 +487,8 @@ public class Dashboard extends javax.swing.JFrame {
         }
         
         try {
-            //new EdgeDetection().findEdge(null);
-            BufferedImage edgeImage = ImageIO.read(new File("Images\\Opened.png"));
+            new EdgeDetection().findEdge(null);
+            BufferedImage edgeImage = ImageIO.read(new File("Images\\FinalEdge.png"));
             int wOpened = edgeImage.getWidth();
             int hOpened = edgeImage.getHeight();
             List<Point> p = new ArrayList<>(SAGAP.sTree.keySet());
@@ -494,6 +496,8 @@ public class Dashboard extends javax.swing.JFrame {
             int numBlastCell = 0;
             int i=0;
             Initialization.src = ImageIO.read(new File(filePath));
+            Graphics g = Initialization.src.getGraphics();
+            g.setColor(Color.RED);
             for(String c : testRecords) {
                 List<Point> tempPoints = new ArrayList<>();
                 Point startPoint = p.get(i++);
@@ -504,7 +508,8 @@ public class Dashboard extends javax.swing.JFrame {
                         for(int h=0;h<hOpened;h++)  {
                             Color edgeColor = new Color(edgeImage.getRGB(w,h));
                             if(edgeColor.getRed() == 255 && tempPoints.contains(new Point(h,w)))
-                                Initialization.src.setRGB(w, h, Color.RED.getRGB());
+                                //Initialization.src.setRGB(w, h, Color.RED.getRGB());
+                                g.drawOval(w-5,h-5,5,5);
                         }
                     numBlastCell++;
                 }
@@ -512,11 +517,14 @@ public class Dashboard extends javax.swing.JFrame {
                     numNormalCell++;
                 }
             }
+            g.dispose();
             ImageIcon im = new ImageIcon(Initialization.src.getScaledInstance(imageContainer.getWidth(), imageContainer.getHeight(),Image.SCALE_SMOOTH));
             imageContainer.setIcon(im);
+            ceProgressMonitor.close();
             JOptionPane.showMessageDialog(this,"Completed in " + timeElapsed(outputTime) + "\n" + Initialization.numComponents
             + " cells detected.\nBlast Cells : " + numBlastCell + "\nNormal Cells : " + numNormalCell ,
             "Completed", JOptionPane.PLAIN_MESSAGE);
+            
         } catch (IOException ex) {
             ex.printStackTrace();
         }
