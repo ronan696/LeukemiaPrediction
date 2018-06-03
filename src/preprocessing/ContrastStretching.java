@@ -2,6 +2,7 @@ package preprocessing;
 
 import ui.*;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.*;
 import javax.imageio.ImageIO;

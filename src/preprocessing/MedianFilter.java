@@ -2,6 +2,7 @@ package preprocessing;
 
 import ui.Initialization;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Arrays;
 import javax.imageio.ImageIO;
@@ -11,7 +12,6 @@ public class MedianFilter {
      File f;
      int []strarray = new int[9]; 
      int sz, median;
-    
      public void performmf() {
      
       try{

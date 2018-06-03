@@ -13,7 +13,7 @@ public class SAGAP {
     BufferedImage opened,grayscale;
     Integer w,h;
     long time_o;
-    Map<Point,List<Point>> sTree = new HashMap<>();
+    public static Map<Point,List<Point>> sTree = new LinkedHashMap<>();
     Map<Point,int []> coordinates = new HashMap<>();
     List<Point> topNodes = new ArrayList<>();
     Point next,current,bottom;

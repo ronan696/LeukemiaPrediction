@@ -11,7 +11,6 @@ public class ImageArithmetic{
     
     BufferedImage temp1= null,temp2=null;
     File f= null, g = null;
-    
     public void compute()
     {
         

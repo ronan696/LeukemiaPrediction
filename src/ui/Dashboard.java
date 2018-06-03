@@ -8,9 +8,12 @@ import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -29,6 +32,7 @@ public class Dashboard extends javax.swing.JFrame {
      * Creates new form DashBoard
      */
     RandomForest rf;
+    String filePath;
     ArrayList<ArrayList<String>> trainingData;
     List<String> testRecords;
     Long outputTime;
@@ -479,16 +483,43 @@ public class Dashboard extends javax.swing.JFrame {
         for(int i=1;i<=Initialization.numComponents;i++)  {
             cellTable.setRowHeight(i-1,((Icon) data[i-1][0]).getIconHeight() + 10);
         }
-        int numNormalCell = 0;
-        int numBlastCell = 0;
-        for(String c : testRecords) {
-            if(c.equals("true"))    numBlastCell++;
-            else    numNormalCell++;
-        }
-
-        JOptionPane.showMessageDialog(this,"Completed in " + timeElapsed(outputTime) + "\n" + Initialization.numComponents
-                + " cells detected.\nBlast Cells : " + numBlastCell + "\nNormal Cells : " + numNormalCell ,
+        
+        try {
+            //new EdgeDetection().findEdge(null);
+            BufferedImage edgeImage = ImageIO.read(new File("Images\\Opened.png"));
+            int wOpened = edgeImage.getWidth();
+            int hOpened = edgeImage.getHeight();
+            List<Point> p = new ArrayList<>(SAGAP.sTree.keySet());
+            int numNormalCell = 0;
+            int numBlastCell = 0;
+            int i=0;
+            Initialization.src = ImageIO.read(new File(filePath));
+            for(String c : testRecords) {
+                List<Point> tempPoints = new ArrayList<>();
+                Point startPoint = p.get(i++);
+                tempPoints.add(startPoint);
+                tempPoints.addAll(SAGAP.sTree.get(startPoint));
+                if(c.equals("true"))    {
+                    for(int w=0;w<wOpened;w++)
+                        for(int h=0;h<hOpened;h++)  {
+                            Color edgeColor = new Color(edgeImage.getRGB(w,h));
+                            if(edgeColor.getRed() == 255 && tempPoints.contains(new Point(h,w)))
+                                Initialization.src.setRGB(w, h, Color.RED.getRGB());
+                        }
+                    numBlastCell++;
+                }
+                else    {
+                    numNormalCell++;
+                }
+            }
+            ImageIcon im = new ImageIcon(Initialization.src.getScaledInstance(imageContainer.getWidth(), imageContainer.getHeight(),Image.SCALE_SMOOTH));
+            imageContainer.setIcon(im);
+            JOptionPane.showMessageDialog(this,"Completed in " + timeElapsed(outputTime) + "\n" + Initialization.numComponents
+            + " cells detected.\nBlast Cells : " + numBlastCell + "\nNormal Cells : " + numNormalCell ,
             "Completed", JOptionPane.PLAIN_MESSAGE);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
     
     private void preferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preferencesActionPerformed
@@ -518,7 +549,7 @@ public class Dashboard extends javax.swing.JFrame {
         int i = fc.showOpenDialog(this);
         if(i==JFileChooser.APPROVE_OPTION){
             File f=fc.getSelectedFile();
-            String filePath=f.getPath();
+            filePath=f.getPath();
             try{
                 rfImagePath.setText(filePath);
                 Initialization.src = ImageIO.read(new File(filePath));
@@ -590,7 +621,7 @@ public class Dashboard extends javax.swing.JFrame {
         int i = fc.showOpenDialog(this);
         if(i==JFileChooser.APPROVE_OPTION){
             File f=fc.getSelectedFile();
-            String filePath=f.getPath();
+            filePath=f.getPath();
             try{
                 knnImagePath.setText(filePath);
                 Initialization.src = ImageIO.read(new File(filePath));
