@@ -440,7 +440,7 @@ public class Dashboard extends javax.swing.JFrame {
                 @Override
                 protected void done()   {
                     populateTable();
-//                    ceProgressMonitor.close();
+                    //ceProgressMonitor.close();
                 }
                 
             };
@@ -499,23 +499,23 @@ public class Dashboard extends javax.swing.JFrame {
             Graphics g = Initialization.src.getGraphics();
             g.setColor(Color.RED);
             for(String c : testRecords) {
-                List<Point> tempPoints = new ArrayList<>();
-                Point startPoint = p.get(i++);
-                tempPoints.add(startPoint);
-                tempPoints.addAll(SAGAP.sTree.get(startPoint));
                 if(c.equals("true"))    {
-                    for(int w=0;w<wOpened;w++)
-                        for(int h=0;h<hOpened;h++)  {
-                            Color edgeColor = new Color(edgeImage.getRGB(w,h));
-                            if(edgeColor.getRed() == 255 && tempPoints.contains(new Point(h,w)))
+                    List<Point> tempPoints = new ArrayList<>();
+                    Point startPoint = p.get(i);
+                    tempPoints.add(startPoint);
+                    tempPoints.addAll(SAGAP.sTree.get(startPoint));
+                    for(Point imagePoint : tempPoints)  {
+                        Color edgeColor = new Color(edgeImage.getRGB(imagePoint.y,imagePoint.x));
+                        if(edgeColor.getRed() == 255)
                                 //Initialization.src.setRGB(w, h, Color.RED.getRGB());
-                                g.drawOval(w-5,h-5,5,5);
-                        }
+                            g.drawOval(imagePoint.y-5,imagePoint.x-5,5,5);
+                    }
                     numBlastCell++;
                 }
                 else    {
                     numNormalCell++;
                 }
+                i++;
             }
             g.dispose();
             ImageIcon im = new ImageIcon(Initialization.src.getScaledInstance(imageContainer.getWidth(), imageContainer.getHeight(),Image.SCALE_SMOOTH));
@@ -657,7 +657,7 @@ public class Dashboard extends javax.swing.JFrame {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-            ProgressMonitor ceProgressMonitor = new ProgressMonitor(this,"Preprocessing Image","",0,100);
+            ceProgressMonitor = new ProgressMonitor(this,"Preprocessing Image","",0,100);
             ceProgressMonitor.setMillisToPopup(500);
             SwingWorker cellExtractor = new SwingWorker<Integer,Integer> ()    {
                 @Override
@@ -710,7 +710,7 @@ public class Dashboard extends javax.swing.JFrame {
 
                 @Override
                 protected void done()   {
-                    ceProgressMonitor.close();
+                    //ceProgressMonitor.close();
                     populateTable();
                 }
                 

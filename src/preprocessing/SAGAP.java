@@ -13,10 +13,15 @@ public class SAGAP {
     BufferedImage opened,grayscale;
     Integer w,h;
     long time_o;
-    public static Map<Point,List<Point>> sTree = new LinkedHashMap<>();
-    Map<Point,int []> coordinates = new HashMap<>();
+    public static Map<Point,List<Point>> sTree;
+    Map<Point,int []> coordinates;
     List<Point> topNodes = new ArrayList<>();
     Point next,current,bottom;
+    
+    public SAGAP() {
+        sTree = new LinkedHashMap<>();
+        coordinates = new LinkedHashMap();
+    }
     
     List<Point> getNeighbours(Point p)   {
         List<Point> neighbours = new ArrayList<>();
@@ -108,7 +113,7 @@ public class SAGAP {
         }
         
         System.out.println("SAGAP completed in " + TimeElapsed(time_o));
-        
+        int c = 1;
         System.out.println("\nFinal Tree");
 //        for(Point n : sTree.keySet()) {
 //            System.out.print(n + " ==> ");
@@ -119,37 +124,50 @@ public class SAGAP {
 //            System.out.println("\nminX : " + cd[0] + ", minY : " + cd[1] + ", maxX : " + cd[2] + ", maxY : " + cd[3]);
 //            System.out.println();
 //        }
-        int c = 1;
-
-        for(Point t : sTree.keySet())   {
-            int [] cd = coordinates.get(t);
-            BufferedImage bin = new BufferedImage(cd[3]-cd[1]+3,cd[2]-cd[0]+3,BufferedImage.TYPE_BYTE_BINARY);
-            BufferedImage gr = new BufferedImage(cd[3]-cd[1]+3,cd[2]-cd[0]+3,BufferedImage.TYPE_INT_RGB);
-            int x = t.x - cd[0] + 1;
-            int y = t.y - cd[1] + 1;
-            Color g  = new Color(grayscale.getRGB(t.y,t.x));
-            bin.setRGB(y,x,Color.WHITE.getRGB());
-            gr.setRGB(y,x,g.getRGB());
-            for(Point b : sTree.get(t)) {
-                x = b.x - cd[0] + 1;
-                y = b.y - cd[1] + 1;
-                g  = new Color(grayscale.getRGB(b.y,b.x));
+        try {
+            
+            List<Point> topPoints = new ArrayList<>(sTree.keySet());
+            //for(Point t : sTree.keySet())
+            for(int i=0;i<topPoints.size();) {
+                int [] cd = coordinates.get(topPoints.get(i));
+                BufferedImage bin = new BufferedImage(cd[3]-cd[1]+3,cd[2]-cd[0]+3,BufferedImage.TYPE_BYTE_BINARY);
+                BufferedImage gr = new BufferedImage(cd[3]-cd[1]+3,cd[2]-cd[0]+3,BufferedImage.TYPE_INT_RGB);
+                int x = topPoints.get(i).x - cd[0] + 1;
+                int y = topPoints.get(i).y - cd[1] + 1;
+                Color g  = new Color(grayscale.getRGB(topPoints.get(i).y,topPoints.get(i).x));
                 bin.setRGB(y,x,Color.WHITE.getRGB());
                 gr.setRGB(y,x,g.getRGB());
-            }
-            if(bin.getWidth()>60 && bin.getHeight()>60) {
-                try {
-                    ImageIO.write(bin, "png", new File("Components\\Component" + c + ".png"));
-                    ImageIO.write(gr, "png", new File("Components\\GComponent" + c + ".png"));
+                for(Point b : sTree.get(topPoints.get(i))) {
+                    x = b.x - cd[0] + 1;
+                    y = b.y - cd[1] + 1;
+                    g  = new Color(grayscale.getRGB(b.y,b.x));
+                    bin.setRGB(y,x,Color.WHITE.getRGB());
+                    gr.setRGB(y,x,g.getRGB());
                 }
-                catch(IOException e)    {
-                    e.printStackTrace();
-                }
-                c++;
-            }
-        }
+                if(bin.getWidth()>50 && bin.getHeight()>50) {
+                    try {
+                        ImageIO.write(bin, "png", new File("Components\\Component" + c + ".png"));
+                        ImageIO.write(gr, "png", new File("Components\\GComponent" + c + ".png"));
+                        System.out.println("Written Component " + c);
+                    }
+                    catch(IOException e)    {
+                        e.printStackTrace();
+                    }
 
-        System.out.println("Completed Writing in " + TimeElapsed(time_o));
+                    c++;
+                    i++;
+                }
+                else    {
+                    sTree.remove(topPoints.get(i));
+                }
+            }
+            System.out.println("Length : " + sTree.size());
+            System.out.println("Completed Writing in " + TimeElapsed(time_o));
+            
+        }
+        catch(Exception e)  {
+            e.printStackTrace();
+        }
         return (c-1);
     }
     

@@ -3,12 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/ui/Initialization.java</file>
-            <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/preprocessing/KMeans.java</file>
             <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/ui/Dashboard.java</file>
-            <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/preprocessing/Grayscale.java</file>
             <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/preprocessing/ImageArithmetic.java</file>
+            <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/ui/AnalysisPanel.java</file>
+            <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/preprocessing/KMeans.java</file>
             <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/preprocessing/SAGAP.java</file>
+            <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/ui/Initialization.java</file>
+            <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/preprocessing/Grayscale.java</file>
             <file>file:/C:/Users/Hp/Documents/NetBeansProjects/LeukemiaPrediction/src/preprocessing/ContrastStretching.java</file>
         </group>
     </open-files>
