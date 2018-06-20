@@ -130,6 +130,45 @@ public class DecisionTree implements Serializable{
 		}
 	}
 
+        
+        
+	/**
+	 * This is the crucial function in tree creation. 
+	 * 
+	 * <ul>
+	 * <li>Step A
+	 * Check if this node is a leaf, if so, it will mark isLeaf true
+	 * and mark Class with the leaf's class. The function will not
+	 * recurse past this point.
+	 * </li>
+	 * <li>Step B
+	 * Create a group of nodes and keep their references in node's fields 		//Create a left and right node and keep their references in
+	 * this node's left and right fields. For debugging purposes,
+	 * the generation number is also recorded. The {@link RandomForest#Ms Ms} attributes are
+	 * now chosen by the {@link #GetVarsToInclude() GetVarsToInclude} function
+	 * </li>
+	 * <li>Step C
+	 * For all Ms variables, first {@link #SortAtAttribute(List,int) sort} the data records by that attribute 
+	 * , then look through the values from lowest to 
+	 * highest. If value i is not equal to value i+1, record i in the list of "indicesToCheck."
+	 * This speeds up the splitting. If the number of indices in indicesToCheck >  MIN_SIZE_TO_CHECK_EACH
+	 * then we will only {@link #CheckPosition(int, int, int, ImageAnalysisStatistics.DTree.DoubleWrap, ImageAnalysisStatistics.DTree.TreeNode) check} the
+	 * entropy at every {@link #INDEX_SKIP INDEX_SKIP} index otherwise, we {@link #CheckPosition(int, int, int, ImageAnalysisStatistics.DTree.DoubleWrap, ImageAnalysisStatistics.DTree.TreeNode) check}
+	 * the entropy for all. The "E" variable records the entropy and we are trying to find the minimum in which to split on
+	 * </li>
+	 * <li>Step D
+	 * The newly generated left and right nodes are now checked:
+	 * If the node has only one record, we mark it as a leaf and set its class equal to
+	 * the class of the record. If it has less than {@link #MIN_NODE_SIZE MIN_NODE_SIZE}
+	 * records, then we mark it as a leaf and set its class equal to the {@link #GetMajorityClass(List) majority class}.
+	 * If it has more, then we do a manual check on its data records and if all have the same class, then it
+	 * is marked as a leaf. If not, then we run {@link #RecursiveSplit(ImageAnalysisStatistics.DTree.TreeNode) RecursiveSplit} on
+	 * that node
+	 * </li>
+	 * </ul>
+	 * 
+	 * @param parent	The node of the parent
+	 */
 	private void RecursiveSplit(TreeNode parent, int Ntreenum){
 		
 		if (!parent.isLeaf){

@@ -12,12 +12,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author Hp
  */
-public class PreferencesPanel extends javax.swing.JPanel {
+public class SettingsPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form SettingsPanel
      */
-    public PreferencesPanel() {
+    public SettingsPanel() {
         initComponents();
     }
 

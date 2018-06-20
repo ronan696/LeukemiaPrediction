@@ -9,7 +9,10 @@ import preprocessing.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.SwingWorker;
@@ -118,7 +121,14 @@ public class ExtractFeaturesPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void browseFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseFolderActionPerformed
-        JFileChooser fc = new JFileChooser("D:\\Dataset\\ALL_IDB2\\images");
+        File defaultPath = null;
+        try {
+            defaultPath = new File(new File(".").getCanonicalPath() + "\\Dataset");
+        } catch (IOException ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JFileChooser fc = new JFileChooser();
+        fc.setCurrentDirectory(defaultPath);
         fc.setDialogTitle("Select a folder");
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Folders","directory");
@@ -137,9 +147,15 @@ public class ExtractFeaturesPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_browseFolderActionPerformed
 
     private void browseFeatureFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseFeatureFileActionPerformed
+        File defaultPath = null;
+        try {
+            defaultPath = new File(new File(".").getCanonicalPath());
+        } catch (IOException ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Specify a file to save");   
-        fileChooser.setSelectedFile(new File("D:\\Dataset\\dataset.txt"));
+        fileChooser.setSelectedFile(new File(defaultPath + "\\dataset.txt"));
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Text", "txt", "dat");
         fileChooser.setFileFilter(filter);
         fileChooser.removeChoosableFileFilter(fileChooser.getAcceptAllFileFilter());
@@ -183,7 +199,7 @@ public class ExtractFeaturesPanel extends javax.swing.JPanel {
                     String record = fe.getArea() + ","
                         + fe.getPerimeter() + "," + fe.getFormFactor() + "," + fe.getStd() + "," 
                             + fe.getVar() + "," + fe.getEnergy() + "," + fe.getEntropy() + ","
-                            + (affected ? "true" : "false");
+                            + (affected ? "yes" : "no");
                     //System.out.println(fileName);
                     bw.append(record + "\n");
                     publish(100*(i+1)/size);

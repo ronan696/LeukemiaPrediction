@@ -27,10 +27,10 @@ public class RandomForest implements Serializable {
     public int corretsPredictions;
 
     @SuppressWarnings("static-access")
-    public RandomForest(int numTrees, int M, int Ms, int C, ArrayList<ArrayList<String>> train) {
+    public RandomForest(int numTrees, int numThreads, int M, int Ms, int C, ArrayList<ArrayList<String>> train) {
         StartTimer();
         this.numTrees = numTrees;
-        this.NUM_THREADS = 4;
+        this.NUM_THREADS = numThreads;
         this.data = train;
         this.M = M;
         this.Ms = Ms;

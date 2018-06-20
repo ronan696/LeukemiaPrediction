@@ -81,14 +81,11 @@ public class Dashboard extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         newFeatureFile = new javax.swing.JMenuItem();
         performAnalysis = new javax.swing.JMenuItem();
-        preferences = new javax.swing.JMenuItem();
+        settings = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         exitSystem = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        about = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Leukemia Prediction");
 
         cellTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -278,7 +275,6 @@ public class Dashboard extends javax.swing.JFrame {
         });
         jMenu1.add(newFeatureFile);
 
-        performAnalysis.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         performAnalysis.setText("Analysis");
         performAnalysis.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -287,14 +283,13 @@ public class Dashboard extends javax.swing.JFrame {
         });
         jMenu1.add(performAnalysis);
 
-        preferences.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        preferences.setText("Preferences");
-        preferences.addActionListener(new java.awt.event.ActionListener() {
+        settings.setText("Settings");
+        settings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                preferencesActionPerformed(evt);
+                settingsActionPerformed(evt);
             }
         });
-        jMenu1.add(preferences);
+        jMenu1.add(settings);
         jMenu1.add(jSeparator1);
 
         exitSystem.setText("Exit");
@@ -306,18 +301,6 @@ public class Dashboard extends javax.swing.JFrame {
         jMenu1.add(exitSystem);
 
         jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Help");
-
-        about.setText("About");
-        about.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                aboutActionPerformed(evt);
-            }
-        });
-        jMenu2.add(about);
-
-        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -389,7 +372,7 @@ public class Dashboard extends javax.swing.JFrame {
                     testRecords = new ArrayList<>();
                     Initialization.numAttrs = (Integer) numAttributes.getValue();
                     Initialization.numTrees = (Integer) numTrees.getValue();
-                    rf = new RandomForest(Initialization.numTrees,7,Initialization.numAttrs,2,trainingData);
+                    rf = new RandomForest(Initialization.numTrees,4,7,Initialization.numAttrs,2,trainingData);
                     rf.readFromFile();
                     startTimer();
                     ceProgressMonitor.setNote("Performing Grayscale Conversion");
@@ -485,13 +468,14 @@ public class Dashboard extends javax.swing.JFrame {
         for(int i=1;i<=Initialization.numComponents;i++)  {
             cellTable.setRowHeight(i-1,((Icon) data[i-1][0]).getIconHeight() + 10);
         }
+
         
         try {
             new EdgeDetection().findEdge(null);
             BufferedImage edgeImage = ImageIO.read(new File("Images\\FinalEdge.png"));
             int wOpened = edgeImage.getWidth();
             int hOpened = edgeImage.getHeight();
-            List<Point> p = new ArrayList<>(SAGAP.sTree.keySet());
+            List<Point> p = new ArrayList<>(SAGAP.sTreeFinal.keySet());
             int numNormalCell = 0;
             int numBlastCell = 0;
             int i=0;
@@ -503,7 +487,7 @@ public class Dashboard extends javax.swing.JFrame {
                     List<Point> tempPoints = new ArrayList<>();
                     Point startPoint = p.get(i);
                     tempPoints.add(startPoint);
-                    tempPoints.addAll(SAGAP.sTree.get(startPoint));
+                    tempPoints.addAll(SAGAP.sTreeFinal.get(startPoint));
                     for(Point imagePoint : tempPoints)  {
                         Color edgeColor = new Color(edgeImage.getRGB(imagePoint.y,imagePoint.x));
                         if(edgeColor.getRed() == 255)
@@ -530,23 +514,30 @@ public class Dashboard extends javax.swing.JFrame {
         }
     }
     
-    private void preferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preferencesActionPerformed
-        PreferencesPanel sp = new PreferencesPanel();
-        PreferencesPanel.testPath.setText(Initialization.testDataPath);
-        PreferencesPanel.trainPath.setText(Initialization.trainDataPath);
-        PreferencesPanel.rfClassificationFilePath.setText(Initialization.rfClassificationFilePath);
+    private void settingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsActionPerformed
+        SettingsPanel sp = new SettingsPanel();
+        SettingsPanel.testPath.setText(Initialization.testDataPath);
+        SettingsPanel.trainPath.setText(Initialization.trainDataPath);
+        SettingsPanel.rfClassificationFilePath.setText(Initialization.rfClassificationFilePath);
         int result = JOptionPane.showConfirmDialog(null, sp,
             "Settings", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-            Initialization.testDataPath = PreferencesPanel.testPath.getText();
-            Initialization.trainDataPath = PreferencesPanel.trainPath.getText();
-            Initialization.rfClassificationFilePath = PreferencesPanel.rfClassificationFilePath.getText();
+            Initialization.testDataPath = SettingsPanel.testPath.getText();
+            Initialization.trainDataPath = SettingsPanel.trainPath.getText();
+            Initialization.rfClassificationFilePath = SettingsPanel.rfClassificationFilePath.getText();
             Initialization.update();
         }
-    }//GEN-LAST:event_preferencesActionPerformed
+    }//GEN-LAST:event_settingsActionPerformed
 
     private void browseImageRFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseImageRFActionPerformed
-        JFileChooser fc=new JFileChooser("D:\\Dataset\\ALL_IDB1\\images");
+        File defaultPath = null;
+        try {
+            defaultPath = new File(new File(".").getCanonicalPath() + "\\Dataset");
+        } catch (IOException ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JFileChooser fc = new JFileChooser();
+        fc.setCurrentDirectory(defaultPath);
         fc.setDialogTitle("Select an Image");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "png", "gif","jpg","jpeg");
         fc.setFileFilter(filter);
@@ -597,7 +588,7 @@ public class Dashboard extends javax.swing.JFrame {
             @Override
             protected Integer doInBackground() {
                 publish("Started");
-                rf = new RandomForest(Initialization.numTrees,7,Initialization.numAttrs,2,trainingData);
+                rf = new RandomForest(Initialization.numTrees,4,7,Initialization.numAttrs,2,trainingData);
                 rf.writeToFile(); 
 //                rf.readFromFile();
 //                String s = "1833.48,439.48737341529164,0.11928703298994943,8.907680240547194,79.34676726783492,0.03126279141729138,5.172957073376205";
@@ -618,7 +609,14 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_trainRFClassifierActionPerformed
 
     private void browseImageKnnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseImageKnnActionPerformed
-        JFileChooser fc=new JFileChooser("D:\\Dataset\\ALL_IDB1\\images");
+        File defaultPath = null;
+        try {
+            defaultPath = new File(new File(".").getCanonicalPath() + "\\Dataset");
+        } catch (IOException ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JFileChooser fc = new JFileChooser();
+        fc.setCurrentDirectory(defaultPath);
         fc.setDialogTitle("Select an Image");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "png", "gif","jpg","jpeg");
         fc.setFileFilter(filter);
@@ -694,7 +692,7 @@ public class Dashboard extends javax.swing.JFrame {
                         String record = fe.getArea() + ","
                             + fe.getPerimeter() + "," + fe.getFormFactor() + "," + fe.getStd() + "," 
                             + fe.getVar() + "," + fe.getEnergy() + "," + fe.getEntropy();
-                        Initialization.numNeighbours = (Integer) numNeighbours.getValue();
+                        Initialization.numNeighbours = (Integer) numNeighbours.getValue();;
                         KNN.kValue = Initialization.numNeighbours;
                         testRecords.add(new KNN().perform(record));
                         //testRecords.add();
@@ -717,12 +715,6 @@ public class Dashboard extends javax.swing.JFrame {
             };
             cellExtractor.execute();
     }//GEN-LAST:event_performKnnClassificationActionPerformed
-
-    private void aboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutActionPerformed
-        AboutPanel ap = new AboutPanel();
-        JOptionPane.showOptionDialog(this, ap, "About", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
-                null, new Object[]{} ,null);
-    }//GEN-LAST:event_aboutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -776,7 +768,6 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem about;
     private javax.swing.JButton browseImageKnn;
     private javax.swing.JButton browseImageRF;
     private static javax.swing.JTable cellTable;
@@ -786,7 +777,6 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -803,9 +793,9 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JMenuItem performAnalysis;
     private javax.swing.JButton performKnnClassification;
     private javax.swing.JButton performRFClassification;
-    private javax.swing.JMenuItem preferences;
     private javax.swing.JTextField rfImagePath;
     private javax.swing.JButton setNeightbours;
+    private javax.swing.JMenuItem settings;
     private javax.swing.JButton trainRFClassifier;
     // End of variables declaration//GEN-END:variables
 }

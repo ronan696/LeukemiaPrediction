@@ -13,7 +13,8 @@ public class SAGAP {
     BufferedImage opened,grayscale;
     Integer w,h;
     long time_o;
-    public static Map<Point,List<Point>> sTree;
+    Map<Point,List<Point>> sTree;
+    public static Map<Point,List<Point>> sTreeFinal;
     Map<Point,int []> coordinates;
     List<Point> topNodes = new ArrayList<>();
     Point next,current,bottom;
@@ -21,6 +22,7 @@ public class SAGAP {
     public SAGAP() {
         sTree = new LinkedHashMap<>();
         coordinates = new LinkedHashMap();
+        sTreeFinal = new LinkedHashMap<>();
     }
     
     List<Point> getNeighbours(Point p)   {
@@ -126,18 +128,20 @@ public class SAGAP {
 //        }
         try {
             
-            List<Point> topPoints = new ArrayList<>(sTree.keySet());
-            //for(Point t : sTree.keySet())
-            for(int i=0;i<topPoints.size();) {
-                int [] cd = coordinates.get(topPoints.get(i));
+            //List<Point> topPoints = new ArrayList<>(sTree.keySet());
+            for(Point t : sTree.keySet())
+            //for(int i=0;i<topPoints.size();) 
+            {
+                int [] cd = coordinates.get(t);
                 BufferedImage bin = new BufferedImage(cd[3]-cd[1]+3,cd[2]-cd[0]+3,BufferedImage.TYPE_BYTE_BINARY);
                 BufferedImage gr = new BufferedImage(cd[3]-cd[1]+3,cd[2]-cd[0]+3,BufferedImage.TYPE_INT_RGB);
-                int x = topPoints.get(i).x - cd[0] + 1;
-                int y = topPoints.get(i).y - cd[1] + 1;
-                Color g  = new Color(grayscale.getRGB(topPoints.get(i).y,topPoints.get(i).x));
+                int x = t.x - cd[0] + 1;
+                int y = t.y - cd[1] + 1;
+                Color g  = new Color(grayscale.getRGB(t.y,t.x));
                 bin.setRGB(y,x,Color.WHITE.getRGB());
                 gr.setRGB(y,x,g.getRGB());
-                for(Point b : sTree.get(topPoints.get(i))) {
+
+                for(Point b : sTree.get(t)) {
                     x = b.x - cd[0] + 1;
                     y = b.y - cd[1] + 1;
                     g  = new Color(grayscale.getRGB(b.y,b.x));
@@ -153,21 +157,22 @@ public class SAGAP {
                     catch(IOException e)    {
                         e.printStackTrace();
                     }
-
+                    sTreeFinal.put(t, sTree.get(t));
                     c++;
-                    i++;
+                    //i++;
                 }
-                else    {
-                    sTree.remove(topPoints.get(i));
-                }
+//                else    {
+//                    sTree.remove(topPoints.get(i));
+//                }
             }
-            System.out.println("Length : " + sTree.size());
+            //System.out.println("Length : " + sTree.size());
             System.out.println("Completed Writing in " + TimeElapsed(time_o));
             
         }
         catch(Exception e)  {
             e.printStackTrace();
-        }
+
+            }
         return (c-1);
     }
     
