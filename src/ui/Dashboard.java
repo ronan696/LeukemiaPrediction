@@ -84,8 +84,11 @@ public class Dashboard extends javax.swing.JFrame {
         settings = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         exitSystem = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        aboutAction = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Leukemia Prediction");
 
         cellTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -275,6 +278,7 @@ public class Dashboard extends javax.swing.JFrame {
         });
         jMenu1.add(newFeatureFile);
 
+        performAnalysis.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         performAnalysis.setText("Analysis");
         performAnalysis.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -283,7 +287,8 @@ public class Dashboard extends javax.swing.JFrame {
         });
         jMenu1.add(performAnalysis);
 
-        settings.setText("Settings");
+        settings.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        settings.setText("Preferences");
         settings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 settingsActionPerformed(evt);
@@ -301,6 +306,18 @@ public class Dashboard extends javax.swing.JFrame {
         jMenu1.add(exitSystem);
 
         jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Help");
+
+        aboutAction.setText("About");
+        aboutAction.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aboutActionActionPerformed(evt);
+            }
+        });
+        jMenu2.add(aboutAction);
+
+        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -716,6 +733,12 @@ public class Dashboard extends javax.swing.JFrame {
             cellExtractor.execute();
     }//GEN-LAST:event_performKnnClassificationActionPerformed
 
+    private void aboutActionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutActionActionPerformed
+        AboutPanel ap = new AboutPanel();
+        JOptionPane.showOptionDialog(this, ap, "About", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, new Object[]{} ,null);
+    }//GEN-LAST:event_aboutActionActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -768,6 +791,7 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem aboutAction;
     private javax.swing.JButton browseImageKnn;
     private javax.swing.JButton browseImageRF;
     private static javax.swing.JTable cellTable;
@@ -777,6 +801,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

@@ -199,7 +199,7 @@ public class ExtractFeaturesPanel extends javax.swing.JPanel {
                     String record = fe.getArea() + ","
                         + fe.getPerimeter() + "," + fe.getFormFactor() + "," + fe.getStd() + "," 
                             + fe.getVar() + "," + fe.getEnergy() + "," + fe.getEntropy() + ","
-                            + (affected ? "yes" : "no");
+                            + (affected ? "true" : "false");
                     //System.out.println(fileName);
                     bw.append(record + "\n");
                     publish(100*(i+1)/size);
